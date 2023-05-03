@@ -1,7 +1,6 @@
 let () = CCRandom.self_init ()
 
 module Matrix = struct
-
   type t = float array array
 
   let pp fmt (x : t) =
@@ -17,32 +16,31 @@ module Matrix = struct
       for j = 0 to num_cols_b - 1 do
         let sum = ref 0.0 in
         for k = 0 to num_cols_a - 1 do
-          sum := !sum +. x.(i).(k) *. y.(k).(j)
+          sum := !sum +. (x.(i).(k) *. y.(k).(j))
         done;
         c.(i).(j) <- !sum
-      done;
+      done
     done;
     c
 
- let transpose m : t =
-  let rows = Array.length m in
-  let cols = Array.length m.(0) in
-  let t = Array.make_matrix cols rows 0. in
-  for i = 0 to rows - 1 do
-    for j = 0 to cols - 1 do
-      t.(j).(i) <- m.(i).(j)
+  let transpose m : t =
+    let rows = Array.length m in
+    let cols = Array.length m.(0) in
+    let t = Array.make_matrix cols rows 0. in
+    for i = 0 to rows - 1 do
+      for j = 0 to cols - 1 do
+        t.(j).(i) <- m.(i).(j)
+      done
     done;
-  done;
-  t let ( * ) = times
+    t
+  let ( * ) = times
 
   let equal x y =
     let rows_equal = Array.equal Float.equal in
     Array.equal rows_equal x y
-
 end
 
 module State = struct
-
   type t = float array array
 
   let random n : t =
@@ -50,12 +48,10 @@ module State = struct
     let random _ = Random.float 1.0 rs in
     Array.init n (fun _ -> Array.init 1 random)
 
-  let pp fmt (x : t) = Format.fprintf fmt "@[%a@]@." (Matrix.pp) x
-
+  let pp fmt (x : t) = Format.fprintf fmt "@[%a@]@." Matrix.pp x
 end
 
 module Transition_probability = struct
-
   type t = Matrix.t
 
   let pp = Matrix.pp
@@ -63,18 +59,16 @@ module Transition_probability = struct
   let random n : t =
     let rs = Random.get_state () in
     let random _ = Random.float 1.0 rs in
-    let generate_row = fun _ ->
+    let generate_row _ =
       let res = Array.init n random in
       let sum = Array.fold_left Float.add 0.0 res in
       let normalized = Array.map (fun x -> x /. sum) res in
       normalized
     in
     Array.init n generate_row
-
 end
 
 module Emission_probability = struct
-
   type t = Matrix.t
 
   let pp = Matrix.pp
@@ -82,14 +76,13 @@ module Emission_probability = struct
   let random n k : t =
     let rs = Random.get_state () in
     let random _ = Random.float 1.0 rs in
-    let generate_row = fun _ ->
+    let generate_row _ =
       let res = Array.init k random in
       let sum = Array.fold_left Float.add 0.0 res in
       let normalized = Array.map (fun x -> x /. sum) res in
       normalized
     in
     Array.init n generate_row
-
 end
 
 let () =
@@ -105,5 +98,5 @@ let () =
     Format.printf "@[next state: %a@]@." Matrix.pp next_state;
     let transposed_state = Matrix.transpose next_state in
     let observation = Matrix.times transposed_state emission_probs in
-    Format.printf "@[observation: %a@]@." Matrix.pp observation;
-  done;
+    Format.printf "@[observation: %a@]@." Matrix.pp observation
+  done

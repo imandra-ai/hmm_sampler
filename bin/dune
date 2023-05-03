@@ -1,12 +1,32 @@
 (executable
  (public_name hmm_sampler)
  (name main)
- (libraries containers containers-data yojson decoders decoders-yojson logs
-   iter ptime ptime.clock.os ppx_deriving.runtime zarith unix fileutils)
+ (libraries
+  containers
+  containers-data
+  yojson
+  decoders
+  decoders-yojson
+  logs
+  iter
+  ptime
+  ptime.clock.os
+  ppx_deriving.runtime
+  zarith
+  unix
+  fileutils)
  (preprocess
   (pps ppx_deriving.std)))
 
 (env
  (_
-  (flags :standard -w -32 -warn-error -a+8 -open Containers -strict-sequence
-    -safe-string)))
+  (flags
+   :standard
+   -w
+   -32
+   -warn-error
+   -a+8
+   -open
+   Containers
+   -strict-sequence
+   -safe-string)))
