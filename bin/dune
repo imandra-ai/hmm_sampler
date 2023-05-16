@@ -1,22 +1,7 @@
 (executable
  (public_name hmm_sampler)
  (name main)
- (libraries
-  containers
-  containers-data
-  yojson
-  decoders
-  decoders-yojson
-  logs
-  iter
-  ptime
-  ptime.clock.os
-  ppx_deriving.runtime
-  zarith
-  unix
-  fileutils)
- (preprocess
-  (pps ppx_deriving.std)))
+ (libraries containers))
 
 (env
  (_

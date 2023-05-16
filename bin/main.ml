@@ -89,7 +89,7 @@ let () =
   let init_prob = State.random 5 in
   let trans_prob = Transition_probability.random 5 in
   let emission_probs = Emission_probability.random 5 3 in
-  Format.printf "@[init_prob: %a@]@." Matrix.pp init_prob;
+  Format.printf "@.@[init_prob: %a@]@." Matrix.pp init_prob;
   Format.printf "@[trans_prob:@.%a@]@." Matrix.pp trans_prob;
   let state = ref init_prob in
   for _ = 0 to 10 do
